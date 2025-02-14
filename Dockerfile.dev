@@ -1,0 +1,23 @@
+# 開発用の Golang イメージ
+FROM golang:1.23.6-alpine3.20
+
+# 作業ディレクトリの設定
+WORKDIR /app
+
+# 必要なツールのインストール
+RUN apk add --no-cache git
+
+# ローカルのコードをコンテナ内で即時反映
+# VOLUME [ "/app" ]
+
+# go.mod が存在しない場合に作成（モジュール名を指定）
+RUN if [ ! -f go.mod ]; then go mod init Simulation-Manage; fi
+
+# 依存関係の解決（go.modが存在しない場合に作成）
+RUN go mod tidy
+
+# ポートを開放
+EXPOSE 8080
+
+# コンテナ起動時に go run main.go を実行
+CMD ["go", "run", "main.go"]

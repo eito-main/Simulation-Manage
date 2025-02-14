@@ -1,0 +1,30 @@
+# Go言語のイメージをベースにする
+FROM golang:1.23.6-alpine3.20 AS builder
+
+# 作業ディレクトリの設定
+WORKDIR /app
+
+# 依存関係を解決するためのgo.mod, go.sumをコピー
+COPY go.mod go.sum ./
+
+# 依存関係をダウンロード
+RUN go mod tidy
+
+# ソースコードをコピー
+COPY . .
+
+# アプリケーションをビルド
+# RUN go build -o main ./app/main.go
+RUN go build -o main .
+
+# 実行専用コンテナ
+FROM alphine:3.20
+WORKDIR /app
+COPY --from=builder /app/main .
+CMD ["./main"]
+
+# コンテナ起動時に実行されるコマンド
+# CMD ["./main"]
+
+# コンテナ起動時に実行されるコマンド
+# CMD ["sh", "-c", "ls && pwd && go run ./app/main.go"]

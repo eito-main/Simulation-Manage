@@ -1,7 +1,16 @@
 package main
 
-import "fmt"
+import (
+	"Simulation-Manage/config"
+	"Simulation-Manage/server"
+	"log"
+)
 
 func main() {
-  fmt.Printf("Hello World\n")
+	// データベース接続の初期化
+	config.InitDB()
+
+	// サーバの起動
+	log.Println("サーバを起動中...")
+	server.Run()
 }

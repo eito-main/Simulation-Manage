@@ -1,15 +1,35 @@
 version: '3'
 
 services:
-  go-app:
-    build: .
+  app_dev:
+    container_name: app_dev
+    # image: golang:1.23.6-alpine3.20
+    # working_dir: /app #ローカルと同期
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
     volumes:
-      - .:/app # 現在のディレクトリをコンテナの/appにマウント
-    tty: true
-    
+      - ./app:/app
+    ports:
+      - "8080:8080" #開発用APIのポート
+    environment:
+      - ENV=development
+    command: tail -f /dev/null #コンテナを開発用に維持
+    # command: sh -c "cd /app && go run main.go"
+
+  app_run:
+    container_name: go_app
+    build:
+      context: .
+      dockerfile: Dockerfile.prod
+    ports:
+      - "8081:8080"
+    environment:
+      - ENV=production
+
   db:
-    image: postgres:17.2
     container_name: postgres_container
+    image: postgres:17.2
     ports:
       - 5432:5432
     volumes:
@@ -20,6 +40,8 @@ services:
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: simulatio-manage
     restart: always
-
+networks:
+  app_network:
+    driver: bridge
 volumes:
   postgres_data:
