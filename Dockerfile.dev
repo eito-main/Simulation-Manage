@@ -11,7 +11,7 @@ RUN apk add --no-cache git
 # VOLUME [ "/app" ]
 
 # go.mod が存在しない場合に作成（モジュール名を指定）
-RUN if [ ! -f go.mod ]; then go mod init Simulation-Manage; fi
+RUN if [ ! -f go.mod ]; then go mod init github.com/example-user/simulation-manage; fi
 
 # 依存関係の解決（go.modが存在しない場合に作成）
 RUN go mod tidy
