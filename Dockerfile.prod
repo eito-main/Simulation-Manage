@@ -14,17 +14,14 @@ RUN go mod tidy
 COPY . .
 
 # アプリケーションをビルド
-# RUN go build -o main ./app/main.go
 RUN go build -o main .
 
 # 実行専用コンテナ
-FROM alphine:3.20
+FROM alpine:3.20
 WORKDIR /app
+
+# ビルド済みバイナリをコピー
 COPY --from=builder /app/main .
+
+# コンテナ起動時にバイナリを実行
 CMD ["./main"]
-
-# コンテナ起動時に実行されるコマンド
-# CMD ["./main"]
-
-# コンテナ起動時に実行されるコマンド
-# CMD ["sh", "-c", "ls && pwd && go run ./app/main.go"]
