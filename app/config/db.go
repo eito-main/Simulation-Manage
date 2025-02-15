@@ -1,29 +1,23 @@
 package config
 
-import (
-	"database/sql"
-	"fmt"
-	"log"
+// DBConfig はデータベース接続設定を管理する構造体
+type DBConfig struct {
+	User     string
+	Password string
+	Host     string
+	Port     string
+	Name     string
+	SSLMode  string
+}
 
-	_ "github.com/lib/pq" // PostgreSQLドライバ
-)
-
-var DB *sql.DB
-
-// InitDBはPostgreSQLへの接続を初期化します
-func InitDB() {
-	var err error
-	connStr := "postgres://postgres:postgres@postgres_container:5432/simulatio-manage?sslmode=disable"
-	DB, err = sql.Open("postgres", connStr)
-	if err != nil {
-		log.Fatal("データベースの接続エラー: ", err)
+// GetDBConfig はデータベース設定を取得する
+func GetDBConfig() DBConfig {
+	return DBConfig{
+		User:     "postgres",
+		Password: "postgres",
+		Host:     "postgres_container",
+		Port:     "5432",
+		Name:     "simulatio-manage",
+		SSLMode:  "disable",
 	}
-
-	// 接続の確認
-	err = DB.Ping()
-	if err != nil {
-		log.Fatal("データベースへの接続確認エラー: ", err)
-	}
-
-	fmt.Println("データベース接続成功")
 }
