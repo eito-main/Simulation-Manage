@@ -8,6 +8,7 @@ import (
 )
 
 // GetUser は指定されたIDのユーザ情報を返すハンドラです
+// http://localhost:8080/users/1
 func GetUser(c *gin.Context) {
 	idParam := c.Param("id")
 	id, err := strconv.Atoi(idParam)
